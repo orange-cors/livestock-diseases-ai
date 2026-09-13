@@ -1,7 +1,6 @@
-import random
 import json
 from pathlib import Path
-
+import random
 import numpy as np
 import torch
 
@@ -19,51 +18,41 @@ def set_seed(seed: int = 42) -> None:
 
 def save_json(obj: dict, path: str | Path) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(obj, f, indent=2)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(obj, f, indent=2, ensure_ascii=False)
 
 
 def load_json(path: str | Path) -> dict:
-    with open(path) as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
+# Danh sách tên hiển thị chuẩn hóa cho các lớp bệnh Gia súc & Gia cầm
 DISPLAY_NAMES = [
-    "Apple: Apple Scab",
-    "Apple: Black Rot",
-    "Apple: Cedar Apple Rust",
-    "Apple: Healthy",
-    "Blueberry: Healthy",
-    "Cherry: Powdery Mildew",
-    "Cherry: Healthy",
-    "Corn: Cercospora Leaf Spot",
-    "Corn: Common Rust",
-    "Corn: Northern Leaf Blight",
-    "Corn: Healthy",
-    "Grape: Black Rot",
-    "Grape: Esca (Black Measles)",
-    "Grape: Leaf Blight",
-    "Grape: Healthy",
-    "Orange: Citrus Greening",
-    "Peach: Bacterial Spot",
-    "Peach: Healthy",
-    "Pepper: Bacterial Spot",
-    "Pepper: Healthy",
-    "Potato: Early Blight",
-    "Potato: Late Blight",
-    "Potato: Healthy",
-    "Raspberry: Healthy",
-    "Soybean: Healthy",
-    "Squash: Powdery Mildew",
-    "Strawberry: Leaf Scorch",
-    "Strawberry: Healthy",
-    "Tomato: Bacterial Spot",
-    "Tomato: Early Blight",
-    "Tomato: Late Blight",
-    "Tomato: Leaf Mold",
-    "Tomato: Septoria Leaf Spot",
-    "Tomato: Spider Mites",
-    "Tomato: Target Spot",
-    "Tomato: Yellow Leaf Curl Virus",
-    "Tomato: Mosaic Virus",
-    "Tomato: Healthy",
+    # --- Gia súc (Cow / Bò) ---
+    "Cow: Ectoparasite Infection",
+    "Cow: Foot and Mouth Disease",
+    "Cow: Healthy",
+    "Cow: Lumpy Skin Disease",
+    "Cow: Mange",
+    "Cow: Mastitis",
+    "Cow: Pink Eye",
+    "Cow: Ringworm",
+    "Cow: Wound Infection",
+    # --- Gia súc (Pig / Lợn) ---
+    "Pig: Bacterial Erysipelas",
+    "Pig: Bacterial Greasy Skin",
+    "Pig: Environmental Dermatitis 1",
+    "Pig: Environmental Dermatitis 2",
+    "Pig: Fungal Pityriasis Rosea",
+    "Pig: Fungal Ringworm",
+    "Pig: Healthy",
+    "Pig: Parasitic Mange",
+    "Pig: Viral Foot and Mouth",
+    "Pig: Viral Swinepox",
+    # --- Gia cầm (Poultry / Gà) ---
+    "Poultry: Coccidiosis",
+    "Poultry: Healthy",
+    "Poultry: Newcastle Disease",
+    "Poultry: Salmonella",
 ]

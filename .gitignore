@@ -8,3 +8,4 @@ __pycache__/
 
 *smoke_test*
 *.zip
+*.venv

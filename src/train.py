@@ -9,7 +9,6 @@ from tqdm import tqdm
 from .utils import save_json
 from .model import save_checkpoint
 
-
 def train_one_epoch(
     model: nn.Module,
     loader: DataLoader,
@@ -24,8 +23,8 @@ def train_one_epoch(
     total = 0
 
     for images, labels in tqdm(loader, desc="train", leave=False):
-        images = images.to(device)
-        labels = labels.to(device)
+        images = images.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
 
         optimizer.zero_grad()
 
@@ -40,9 +39,12 @@ def train_one_epoch(
         correct += (predictions == labels).sum().item()
         total += labels.size(0)
 
+    epoch_loss = running_loss / total if total > 0 else 0.0
+    epoch_acc = correct / total if total > 0 else 0.0
+
     return {
-        "loss": running_loss / total,
-        "accuracy": correct / total,
+        "loss": epoch_loss,
+        "accuracy": epoch_acc,
     }
 
 
@@ -60,8 +62,8 @@ def evaluate_loader(
     total = 0
 
     for images, labels in tqdm(loader, desc="eval", leave=False):
-        images = images.to(device)
-        labels = labels.to(device)
+        images = images.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
 
         outputs = model(images)
         loss = criterion(outputs, labels)
@@ -71,9 +73,12 @@ def evaluate_loader(
         correct += (predictions == labels).sum().item()
         total += labels.size(0)
 
+    eval_loss = running_loss / total if total > 0 else 0.0
+    eval_acc = correct / total if total > 0 else 0.0
+
     return {
-        "loss": running_loss / total,
-        "accuracy": correct / total,
+        "loss": eval_loss,
+        "accuracy": eval_acc,
     }
 
 
@@ -89,14 +94,17 @@ def train_model(
     history_path: str,
     phase_name: str,
 ) -> dict:
+    # 1. Khởi tạo Hàm tổn thất (Loss Function) có tính đến Class Weights
     if class_weights is not None:
-        criterion = nn.CrossEntropyLoss(weight=class_weights.to(device))
+        weights = class_weights.to(device=device, dtype=torch.float32)
+        criterion = nn.CrossEntropyLoss(weight=weights)
     else:
         criterion = nn.CrossEntropyLoss()
 
+    # 2. Lọc các tham số được phép huấn luyện (Trainable Parameters)
     trainable_parameters = [p for p in model.parameters() if p.requires_grad]
 
-    optimizer = torch.optim.Adam(
+    optimizer = torch.optim.AdamW(
         trainable_parameters,
         lr=learning_rate,
         weight_decay=1e-4,
@@ -105,6 +113,7 @@ def train_model(
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer,
         T_max=n_epochs,
+        eta_min=1e-6,
     )
 
     history = {
@@ -155,7 +164,7 @@ def train_model(
         history["epoch_time_seconds"].append(round(elapsed, 1))
 
         print(
-            f"Epoch {epoch}/{n_epochs} | "
+            f"Epoch {epoch:02d}/{n_epochs:02d} | "
             f"Train Loss: {train_metrics['loss']:.4f} | "
             f"Train Acc: {train_metrics['accuracy']:.4f} | "
             f"Val Loss: {val_metrics['loss']:.4f} | "
@@ -163,6 +172,7 @@ def train_model(
             f"Time: {elapsed:.0f}s"
         )
 
+        # Lưu Checkpoint xuất sắc nhất
         if val_metrics["accuracy"] > best_val_accuracy:
             best_val_accuracy = val_metrics["accuracy"]
             history["best_val_accuracy"] = round(best_val_accuracy, 6)
@@ -178,7 +188,7 @@ def train_model(
                 },
             )
 
-            print(f"Best checkpoint saved: {best_val_accuracy:.4f}")
+            print(f"  --> Best checkpoint saved! (Val Acc: {best_val_accuracy:.4f})")
 
     save_json(history, history_path)
 
