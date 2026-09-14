@@ -7,7 +7,7 @@ from src.model import build_model, load_checkpoint
 
 def load_best_model(
     checkpoint_path: str | Path = None,
-    n_classes: int = 19,
+    n_classes: int = 10,
     device: torch.device | None = None,
 ) -> nn.Module:
     """Load mô hình ResNet-18 đã huấn luyện xong để chạy dự đoán (Inference)."""

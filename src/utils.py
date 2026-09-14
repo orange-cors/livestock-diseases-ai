@@ -30,15 +30,15 @@ def load_json(path: str | Path) -> dict:
 # Danh sách tên hiển thị chuẩn hóa cho các lớp bệnh Gia súc & Gia cầm
 DISPLAY_NAMES = [
     # --- Gia súc (Cow / Bò) ---
-    "Cow: Ectoparasite Infection",
-    "Cow: Foot and Mouth Disease",
-    "Cow: Healthy",
-    "Cow: Lumpy Skin Disease",
-    "Cow: Mange",
-    "Cow: Mastitis",
-    "Cow: Pink Eye",
-    "Cow: Ringworm",
-    "Cow: Wound Infection",
+    # "Cow: Ectoparasite Infection",
+    # "Cow: Foot and Mouth Disease",
+    # "Cow: Healthy",
+    # "Cow: Lumpy Skin Disease",
+    # "Cow: Mange",
+    # "Cow: Mastitis",
+    # "Cow: Pink Eye",
+    # "Cow: Ringworm",
+    # "Cow: Wound Infection",
     # --- Gia súc (Pig / Lợn) ---
     "Pig: Bacterial Erysipelas",
     "Pig: Bacterial Greasy Skin",
@@ -51,8 +51,8 @@ DISPLAY_NAMES = [
     "Pig: Viral Foot and Mouth",
     "Pig: Viral Swinepox",
     # --- Gia cầm (Poultry / Gà) ---
-    "Poultry: Coccidiosis",
-    "Poultry: Healthy",
-    "Poultry: Newcastle Disease",
-    "Poultry: Salmonella",
+    # "Poultry: Coccidiosis",
+    # "Poultry: Healthy",
+    # "Poultry: Newcastle Disease",
+    # "Poultry: Salmonella",
 ]
