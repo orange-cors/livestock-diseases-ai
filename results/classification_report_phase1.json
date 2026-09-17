@@ -1,76 +1,40 @@
 {
-  "Pig__Bacterial_Erysipelas": {
-    "precision": 0.4656084656084656,
-    "recall": 0.4943820224719101,
-    "f1-score": 0.47956403269754766,
-    "support": 178.0
+  "Chicken__Cocci": {
+    "precision": 0.9715099715099715,
+    "recall": 0.9142091152815014,
+    "f1-score": 0.9419889502762431,
+    "support": 373.0
   },
-  "Pig__Bacterial_Greasy": {
-    "precision": 0.4452054794520548,
-    "recall": 0.41139240506329117,
-    "f1-score": 0.4276315789473684,
-    "support": 158.0
+  "Chicken__Healthy": {
+    "precision": 0.8571428571428571,
+    "recall": 0.9256198347107438,
+    "f1-score": 0.8900662251655629,
+    "support": 363.0
   },
-  "Pig__Environmental_Dermatitis": {
-    "precision": 0.6666666666666666,
-    "recall": 0.5620915032679739,
-    "f1-score": 0.6099290780141844,
-    "support": 153.0
+  "Chicken__Ncd": {
+    "precision": 0.65625,
+    "recall": 0.7325581395348837,
+    "f1-score": 0.6923076923076923,
+    "support": 86.0
   },
-  "Pig__Environmental_Sunburn": {
-    "precision": 0.4972972972972973,
-    "recall": 0.5508982035928144,
-    "f1-score": 0.5227272727272727,
-    "support": 167.0
+  "Chicken__Salmo": {
+    "precision": 0.955026455026455,
+    "recall": 0.9139240506329114,
+    "f1-score": 0.9340232858990944,
+    "support": 395.0
   },
-  "Pig__Fungal_Pityriasis_Rosea": {
-    "precision": 0.746031746031746,
-    "recall": 0.27167630057803466,
-    "f1-score": 0.3983050847457627,
-    "support": 173.0
-  },
-  "Pig__Fungal_Ringworm": {
-    "precision": 0.5961538461538461,
-    "recall": 0.7005649717514124,
-    "f1-score": 0.6441558441558441,
-    "support": 177.0
-  },
-  "Pig__Healthy": {
-    "precision": 0.7004405286343612,
-    "recall": 0.9244186046511628,
-    "f1-score": 0.7969924812030075,
-    "support": 172.0
-  },
-  "Pig__Parasitic_Mange": {
-    "precision": 0.41237113402061853,
-    "recall": 0.26143790849673204,
-    "f1-score": 0.32,
-    "support": 153.0
-  },
-  "Pig__Viral_Foot_and_Mouth": {
-    "precision": 0.5296803652968036,
-    "recall": 0.6904761904761905,
-    "f1-score": 0.599483204134367,
-    "support": 168.0
-  },
-  "Pig__Viral_Swinepox": {
-    "precision": 0.5622119815668203,
-    "recall": 0.6740331491712708,
-    "f1-score": 0.6130653266331658,
-    "support": 181.0
-  },
-  "accuracy": 0.5589285714285714,
+  "accuracy": 0.9046836483155299,
   "macro avg": {
-    "precision": 0.5621667510728681,
-    "recall": 0.5541371259520793,
-    "f1-score": 0.5411853903258519,
-    "support": 1680.0
+    "precision": 0.8599823209198209,
+    "recall": 0.87157778504001,
+    "f1-score": 0.8645965384121481,
+    "support": 1217.0
   },
   "weighted avg": {
-    "precision": 0.5637901003433483,
-    "recall": 0.5589285714285714,
-    "f1-score": 0.5441582524012903,
-    "support": 1680.0
+    "precision": 0.9097691259256584,
+    "recall": 0.9046836483155299,
+    "f1-score": 0.9062724549356959,
+    "support": 1217.0
   },
-  "overall_accuracy": 0.5589285714285714
+  "overall_accuracy": 0.9046836483155299
 }

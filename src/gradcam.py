@@ -92,8 +92,10 @@ def numpy_to_png_bytes(image):
 def predict_with_gradcam(
     model,
     image,
-    device
+    device,
+    class_names: list[str] | None = None,
 ):
+    class_names = class_names or DISPLAY_NAMES
     input_tensor = prepare_image(
         image
     ).to(device)
@@ -113,7 +115,7 @@ def predict_with_gradcam(
 
         top5_prob, top5_indices = torch.topk(
             probabilities,
-            k=5
+            k=min(5, probabilities.numel())
         )
 
     top5_prob = (
@@ -134,7 +136,7 @@ def predict_with_gradcam(
         top5_indices[0]
     )
 
-    predicted_class = DISPLAY_NAMES[
+    predicted_class = class_names[
         predicted_idx
     ]
 
@@ -153,7 +155,7 @@ def predict_with_gradcam(
 
         top5.append({
             "index": idx,
-            "class_name": DISPLAY_NAMES[idx],
+            "class_name": class_names[idx],
             "probability": float(prob),
             "percentage": float(prob * 100)
         })

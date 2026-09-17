@@ -7,7 +7,7 @@ from src.model import build_model, load_checkpoint
 
 def load_best_model(
     checkpoint_path: str | Path = None,
-    n_classes: int = 10,
+    n_classes: int | None = None,
     device: torch.device | None = None,
 ) -> nn.Module:
     """Load mô hình ResNet-18 đã huấn luyện xong để chạy dự đoán (Inference)."""
@@ -18,7 +18,7 @@ def load_best_model(
     # 2. Xử lý đường dẫn checkpoint mặc định nếu không truyền vào
     project_root = Path(__file__).resolve().parent.parent
     if checkpoint_path is None:
-        checkpoint_path = project_root / "models" / "resnet18_phase2_best.pth"
+        checkpoint_path = project_root / "models" / "resnet18_chicken_phase2_best.pth"
     else:
         checkpoint_path = Path(checkpoint_path)
 
@@ -26,6 +26,16 @@ def load_best_model(
     if not checkpoint_path.exists():
         raise FileNotFoundError(
             f"Không tìm thấy file trọng số mô hình tại:\n{checkpoint_path}"
+        )
+
+    checkpoint = torch.load(checkpoint_path, map_location="cpu")
+    checkpoint_n_classes = checkpoint["state_dict"]["fc.1.weight"].shape[0]
+
+    if n_classes is None:
+        n_classes = checkpoint_n_classes
+    elif n_classes != checkpoint_n_classes:
+        raise ValueError(
+            f"Checkpoint has {checkpoint_n_classes} classes, but n_classes={n_classes}."
         )
 
     print("=" * 60)

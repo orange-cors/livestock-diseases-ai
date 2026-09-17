@@ -169,6 +169,7 @@ def plot_per_class_f1(
 def plot_training_curves(
     history: dict,
     save_path: str | Path,
+    prefix: str = "",
 ):
     """Vẽ đường cong Loss và Accuracy qua các Epoch."""
     epochs = range(1, len(history["train_loss"]) + 1)
@@ -193,8 +194,13 @@ def plot_training_curves(
     axes[1].grid(True)
 
     plt.tight_layout()
-    Path(save_path).parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(save_path, dpi=300, bbox_inches="tight")
+    save_path = Path(save_path)
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(
+        save_path.parent / f"{prefix}{save_path.name}",
+        dpi=300,
+        bbox_inches="tight",
+    )
     plt.close()
 
 
@@ -207,6 +213,7 @@ def run_full_evaluation(
     figures_dir: str | Path,
     label: str,
     display_names: list | None = None,
+    prefix: str = "",
 ) -> dict:
     """Chạy đánh giá toàn diện mô hình trên tập Test set."""
     y_true, y_pred = collect_predictions(model, test_loader, device)
@@ -230,7 +237,7 @@ def run_full_evaluation(
         y_true,
         y_pred,
         class_names,
-        save_path=figures_dir / f"confusion_matrix_{label}.png",
+        save_path=figures_dir / f"{prefix}confusion_matrix_{label}.png",
         normalize=True,
         display_names=display_names,
     )
@@ -238,7 +245,7 @@ def run_full_evaluation(
     plot_per_class_f1(
         report,
         class_names,
-        save_path=figures_dir / f"per_class_f1_{label}.png",
+        save_path=figures_dir / f"{prefix}per_class_f1_{label}.png",
         display_names=display_names,
     )
 
