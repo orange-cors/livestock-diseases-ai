@@ -229,8 +229,8 @@ def run_full_evaluation(
 
     save_classification_report(
         report,
-        json_path=results_dir / f"classification_report_{label}.json",
-        csv_path=results_dir / f"classification_report_{label}.csv",
+        json_path=results_dir / f"{prefix}classification_report_{label}.json",
+        csv_path=results_dir / f"{prefix}classification_report_{label}.csv",
     )
 
     plot_confusion_matrix(
