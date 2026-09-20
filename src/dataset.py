@@ -82,7 +82,7 @@ def make_loaders(
     val_dataset,
     test_dataset,
     batch_size: int = 32,
-    num_workers: int = 2,
+    num_workers: int = 4,
     pin_memory: bool = True,
     persistent_workers: bool = True,
 ):

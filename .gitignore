@@ -1,10 +1,14 @@
 venv/
 data/
 archive/
+pytorch_grad_cam/
+.venv/
+.vscode/
 
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
+
 
 *smoke_test*
 *.zip
