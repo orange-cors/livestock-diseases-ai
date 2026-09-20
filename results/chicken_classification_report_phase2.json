@@ -1,0 +1,40 @@
+{
+  "Chicken__Cocci": {
+    "precision": 0.989010989010989,
+    "recall": 0.9651474530831099,
+    "f1-score": 0.9769335142469471,
+    "support": 373.0
+  },
+  "Chicken__Healthy": {
+    "precision": 0.9624664879356568,
+    "recall": 0.9889807162534435,
+    "f1-score": 0.9755434782608695,
+    "support": 363.0
+  },
+  "Chicken__Ncd": {
+    "precision": 0.9772727272727273,
+    "recall": 1.0,
+    "f1-score": 0.9885057471264368,
+    "support": 86.0
+  },
+  "Chicken__Salmo": {
+    "precision": 0.9923469387755102,
+    "recall": 0.9848101265822785,
+    "f1-score": 0.98856416772554,
+    "support": 395.0
+  },
+  "accuracy": 0.981101068200493,
+  "macro avg": {
+    "precision": 0.9802742857487208,
+    "recall": 0.984734573979708,
+    "f1-score": 0.9823867268399483,
+    "support": 1217.0
+  },
+  "weighted avg": {
+    "precision": 0.9813466962888441,
+    "recall": 0.981101068200493,
+    "f1-score": 0.9811116055277476,
+    "support": 1217.0
+  },
+  "overall_accuracy": 0.981101068200493
+}

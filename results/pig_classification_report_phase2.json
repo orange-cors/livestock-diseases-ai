@@ -1,0 +1,76 @@
+{
+  "Pig__Bacterial_Erysipelas": {
+    "precision": 0.7788461538461539,
+    "recall": 0.7641509433962265,
+    "f1-score": 0.7714285714285715,
+    "support": 106.0
+  },
+  "Pig__Bacterial_Greasy": {
+    "precision": 0.7211538461538461,
+    "recall": 0.7075471698113207,
+    "f1-score": 0.7142857142857143,
+    "support": 106.0
+  },
+  "Pig__Environmental_Dermatitis": {
+    "precision": 0.8316831683168316,
+    "recall": 0.7924528301886793,
+    "f1-score": 0.8115942028985508,
+    "support": 106.0
+  },
+  "Pig__Environmental_Sunburn": {
+    "precision": 0.7706422018348624,
+    "recall": 0.7850467289719626,
+    "f1-score": 0.7777777777777778,
+    "support": 107.0
+  },
+  "Pig__Fungal_Pityriasis_Rosea": {
+    "precision": 0.8272727272727273,
+    "recall": 0.8584905660377359,
+    "f1-score": 0.8425925925925926,
+    "support": 106.0
+  },
+  "Pig__Fungal_Ringworm": {
+    "precision": 0.8910891089108911,
+    "recall": 0.8490566037735849,
+    "f1-score": 0.8695652173913043,
+    "support": 106.0
+  },
+  "Pig__Healthy": {
+    "precision": 0.911504424778761,
+    "recall": 0.9716981132075472,
+    "f1-score": 0.9406392694063926,
+    "support": 106.0
+  },
+  "Pig__Parasitic_Mange": {
+    "precision": 0.6831683168316832,
+    "recall": 0.6571428571428571,
+    "f1-score": 0.6699029126213593,
+    "support": 105.0
+  },
+  "Pig__Viral_Foot_and_Mouth": {
+    "precision": 0.9009009009009009,
+    "recall": 0.9433962264150944,
+    "f1-score": 0.9216589861751152,
+    "support": 106.0
+  },
+  "Pig__Viral_Swinepox": {
+    "precision": 0.8018867924528302,
+    "recall": 0.8018867924528302,
+    "f1-score": 0.8018867924528302,
+    "support": 106.0
+  },
+  "accuracy": 0.8132075471698114,
+  "macro avg": {
+    "precision": 0.8118147641299487,
+    "recall": 0.813086883139784,
+    "f1-score": 0.8121332037030209,
+    "support": 1060.0
+  },
+  "weighted avg": {
+    "precision": 0.8118972866629706,
+    "recall": 0.8132075471698114,
+    "f1-score": 0.8122349724437344,
+    "support": 1060.0
+  },
+  "overall_accuracy": 0.8132075471698114
+}
