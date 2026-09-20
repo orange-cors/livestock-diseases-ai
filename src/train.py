@@ -94,6 +94,9 @@ def train_model(
     history_path: str,
     phase_name: str,
 ) -> dict:
+    if n_epochs < 1:
+        raise ValueError(f"n_epochs must be at least 1, got {n_epochs}.")
+
     # 1. Khởi tạo Hàm tổn thất (Loss Function) có tính đến Class Weights
     if class_weights is not None:
         weights = class_weights.to(device=device, dtype=torch.float32)
@@ -103,6 +106,8 @@ def train_model(
 
     # 2. Lọc các tham số được phép huấn luyện (Trainable Parameters)
     trainable_parameters = [p for p in model.parameters() if p.requires_grad]
+    if not trainable_parameters:
+        raise ValueError("The model has no trainable parameters.")
 
     optimizer = torch.optim.AdamW(
         trainable_parameters,
@@ -128,7 +133,7 @@ def train_model(
         "best_val_accuracy": 0.0,
     }
 
-    best_val_accuracy = 0.0
+    best_val_accuracy = float("-inf")
 
     print(f"\nTraining {phase_name}")
     print(f"Epochs: {n_epochs}")

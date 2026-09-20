@@ -37,12 +37,21 @@ def load_dataset(root: str | Path):
     val_dir = root / "val"
     test_dir = root / "test"
 
-    if not train_dir.exists():
-        raise FileNotFoundError(f"Không tìm thấy thư mục tập train tại: {train_dir}")
+    missing_dirs = [path for path in (train_dir, val_dir, test_dir) if not path.is_dir()]
+    if missing_dirs:
+        missing = ", ".join(str(path) for path in missing_dirs)
+        raise FileNotFoundError(f"Missing dataset split directories: {missing}")
 
     train_dataset = ImageFolder(train_dir, transform=get_transforms("train"))
     val_dataset = ImageFolder(val_dir, transform=get_transforms("val"))
     test_dataset = ImageFolder(test_dir, transform=get_transforms("test"))
+
+    if not (train_dataset.class_to_idx == val_dataset.class_to_idx == test_dataset.class_to_idx):
+        raise ValueError(
+            "Class folders must match across train, val, and test splits. "
+            f"Got train={train_dataset.classes}, val={val_dataset.classes}, "
+            f"test={test_dataset.classes}."
+        )
 
     class_names = train_dataset.classes
     class_to_idx = train_dataset.class_to_idx

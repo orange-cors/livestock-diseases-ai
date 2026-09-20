@@ -1,0 +1,40 @@
+{
+  "Cow__Foot-and-mouth": {
+    "precision": 0.9333333333333333,
+    "recall": 0.9158878504672897,
+    "f1-score": 0.9245283018867925,
+    "support": 107.0
+  },
+  "Cow__Healthy": {
+    "precision": 0.9141104294478528,
+    "recall": 0.8816568047337278,
+    "f1-score": 0.8975903614457831,
+    "support": 169.0
+  },
+  "Cow__Lumpy": {
+    "precision": 0.9096045197740112,
+    "recall": 0.92,
+    "f1-score": 0.9147727272727273,
+    "support": 175.0
+  },
+  "Cow__Mastitis": {
+    "precision": 0.8205128205128205,
+    "recall": 0.9696969696969697,
+    "f1-score": 0.8888888888888888,
+    "support": 33.0
+  },
+  "accuracy": 0.9090909090909091,
+  "macro avg": {
+    "precision": 0.8943902757670044,
+    "recall": 0.9218104062244968,
+    "f1-score": 0.9064450698735479,
+    "support": 484.0
+  },
+  "weighted avg": {
+    "precision": 0.9103492629767126,
+    "recall": 0.9090909090909091,
+    "f1-score": 0.9091649999840594,
+    "support": 484.0
+  },
+  "overall_accuracy": 0.9090909090909091
+}
