@@ -111,11 +111,8 @@ livestock-diseases-ai/
 ├── frontend/                     # Giao diện web prototype
 ├── models/                       # Checkpoint tốt nhất của từng phase
 ├── notebooks/
-│   ├── 01_cow_pipeline.ipynb     # Train và đánh giá mô hình bò
-│   ├── 01_chicken_pipeline.ipynb # Train và đánh giá mô hình gà
-│   ├── 01_pig_pipeline.ipynb     # Train và đánh giá mô hình lợn
-│   ├── 02_demo.ipynb             # Demo inference chính
-│   └── 03_demoRad.ipynb          # Notebook thử nghiệm cũ, không thuộc luồng chính
+│   ├── 01_training_pipeline.ipynb # Huấn luyện & đánh giá tổng hợp cả 3 mô hình (Bò, Gà, Lợn)
+│   └── 02_demo.ipynb              # Demo dự đoán và trực quan hóa Grad-CAM
 ├── results/                      # History và classification report
 ├── src/
 │   ├── dataset.py                # Transform, đọc dataset, class weight, DataLoader
@@ -174,13 +171,13 @@ dataset_root/
     └── ...
 ```
 
-Đường dẫn mà các notebook đang sử dụng:
+Đường dẫn mà `notebooks/01_training_pipeline.ipynb` đang sử dụng:
 
-| Notebook | Dataset path |
+| Mô hình (`ANIMAL`) | Dataset path |
 |---|---|
-| `01_cow_pipeline.ipynb` | `data/Cow_data/` |
-| `01_chicken_pipeline.ipynb` | `data/Livestock_Dataset/Poultry_Feces/` |
-| `01_pig_pipeline.ipynb` | `data/Livestock_Dataset/Livestock_Skin/` |
+| `cow` | `data/Cow_data/` |
+| `chicken` | `data/Livestock_Dataset/Poultry_Feces/` |
+| `pig` | `data/Livestock_Dataset/Livestock_Skin/` |
 
 Tên thư mục lớp trong `train`, `val` và `test` phải giống nhau. `src/dataset.py` sẽ dừng và báo lỗi nếu thiếu split hoặc mapping lớp không đồng nhất.
 
@@ -194,15 +191,11 @@ Khởi động Jupyter:
 jupyter lab
 ```
 
-Sau đó chọn kernel thuộc `venv` và chạy một trong ba notebook từ trên xuống dưới:
+Sau đó chọn kernel thuộc `venv` và mở file `notebooks/01_training_pipeline.ipynb` rồi chạy từ trên xuống dưới (**Run All**).
 
-1. `notebooks/01_cow_pipeline.ipynb`
-2. `notebooks/01_chicken_pipeline.ipynb`
-3. `notebooks/01_pig_pipeline.ipynb`
+Notebook sẽ tự động thực hiện tuần tự quy trình huấn luyện và đánh giá cho cả 3 loài (`ANIMALS_TO_RUN = ["cow", "chicken", "pig"]`): đọc dữ liệu → smoke test → Phase 1 → đánh giá → Phase 2 → đánh giá → giải phóng VRAM → tổng hợp bảng đối chiếu chung. Nếu chỉ muốn huấn luyện lại riêng 1 loài, bạn chỉ cần sửa `ANIMALS_TO_RUN = ["pig"]` ở cell cấu hình.
 
-Ba notebook độc lập, vì vậy không bắt buộc chạy theo thứ tự trên. Mỗi notebook thực hiện toàn bộ quy trình: đọc dữ liệu → smoke test → Phase 1 → đánh giá → Phase 2 → đánh giá.
-
-Nếu GPU bị thiếu bộ nhớ, giảm `batch_size=32` xuống `16` hoặc `8` trong cell tạo DataLoader.
+Nếu GPU bị thiếu bộ nhớ, giảm `BATCH_SIZE = 32` xuống `16` hoặc `8` trong cell cấu hình.
 
 ### 8.2. File đầu ra
 
@@ -237,7 +230,7 @@ Không sử dụng `03_demoRad.ipynb` cho luồng hiện tại vì notebook này
 
 | Nhóm | Vai trò |
 |---|---|
-| `notebooks/01_*_pipeline.ipynb` | Điều phối toàn bộ quy trình train và đánh giá |
+| `notebooks/01_training_pipeline.ipynb` | Điều phối toàn bộ quy trình train và đánh giá tổng hợp cho cả 3 loài |
 | `src/dataset.py` | Chuẩn hóa cách đọc và tiền xử lý dữ liệu cho cả ba mô hình |
 | `src/model.py` | Tạo ResNet18 và quản lý checkpoint |
 | `src/train.py` | Chứa logic train/validation dùng chung |
