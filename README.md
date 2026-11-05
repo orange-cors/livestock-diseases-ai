@@ -94,7 +94,7 @@ Phase 2 tốt hơn rõ rệt ở cả ba nhóm, cho thấy fine-tuning toàn b�
 
 | Đối tượng | Training curves | Confusion matrix | F1 từng lớp |
 |---|---|---|---|
-| Cow | [Xem biểu đồ](figures/cow_training2_curves_phase2.png) | [Xem ma trận](figures/cow_confusion_matrix_phase2.png) | [Xem F1](figures/cow_per_class_f1_phase2.png) |
+| Cow | [Xem biểu đồ](figures/cow_training_curves_phase2.png) | [Xem ma trận](figures/cow_confusion_matrix_phase2.png) | [Xem F1](figures/cow_per_class_f1_phase2.png) |
 | Chicken | [Xem biểu đồ](figures/chicken_training_curves_phase2.png) | [Xem ma trận](figures/chicken_confusion_matrix_phase2.png) | [Xem F1](figures/chicken_per_class_f1_phase2.png) |
 | Pig | [Xem biểu đồ](figures/pig_training_curves_phase2.png) | [Xem ma trận](figures/pig_confusion_matrix_phase2.png) | [Xem F1](figures/pig_per_class_f1_phase2.png) |
 
@@ -211,8 +211,8 @@ Quy ước tên file sử dụng tiền tố `cow_`, `chicken_` hoặc `pig_`:
 ```text
 models/resnet18_<animal>_phase1_best.pth
 models/resnet18_<animal>_phase2_best.pth
-results/history_<animal>_phase1.json
-results/history_<animal>_phase2.json
+results/<animal>_history_phase1.json (đồng bộ cùng history_<animal>_phase1.json)
+results/<animal>_history_phase2.json (đồng bộ cùng history_<animal>_phase2.json)
 results/<animal>_classification_report_phase1.{csv,json}
 results/<animal>_classification_report_phase2.{csv,json}
 figures/<animal>_confusion_matrix_phase*.png
@@ -222,15 +222,14 @@ figures/<animal>_training_curves_phase*.png
 
 ### 8.3. Chạy demo dự đoán
 
-Luồng demo chính nằm trong `notebooks/02_demo.ipynb`. Trước khi chạy, sửa ba biến ở cell đầu:
+Luồng demo chính nằm trong `notebooks/02_demo.ipynb`. Notebook hỗ trợ chọn trực tiếp bất kỳ loài nào:
 
 ```python
-CUSTOM_IMAGE_PATH = r"duong_dan_den_anh_can_du_doan.jpg"
-MODEL_PATH = str(PROJECT_ROOT / "models" / "resnet18_chicken_phase2_best.pth")
-CLASS_NAMES = sorted(...)
+ANIMAL = "chicken"  # Chọn "cow", "chicken" hoặc "pig"
+CUSTOM_IMAGE_PATH = PROJECT_ROOT / "figures" / "sample_test.jpg"
 ```
 
-`MODEL_PATH` và `CLASS_NAMES` phải thuộc cùng một loài. Notebook hiện được cấu hình mẫu cho mô hình chicken. Kết quả trả về gồm lớp dự đoán, độ tin cậy, top 5 dự đoán và dữ liệu ảnh Grad-CAM.
+Hệ thống sẽ tự động xác định checkpoint Phase 2 tương ứng, tải nhãn phân loại từ từ điển chuẩn hóa `ANIMAL_CLASSES`, thực hiện dự đoán Top-5 xác suất và hiển thị trực quan bản đồ nhiệt Grad-CAM ngay trên Jupyter Notebook.
 
 Không sử dụng `03_demoRad.ipynb` cho luồng hiện tại vì notebook này còn tham chiếu tới dataset PlantVillage và API Grad-CAM cũ.
 

@@ -90,10 +90,27 @@ def train_model(
     learning_rate: float,
     class_weights: torch.Tensor | None,
     device: torch.device,
-    checkpoint_path: str,
-    history_path: str,
+    checkpoint_path: str | Path,
+    history_path: str | Path,
     phase_name: str,
+    class_names: list[str] | None = None,
 ) -> dict:
+    """
+    Quy trình huấn luyện mô hình theo từng phase (Phase 1: Feature Extraction, Phase 2: Full Fine-tuning).
+
+    Tham số:
+    - model: Mô hình ResNet-18 cần huấn luyện.
+    - train_loader: DataLoader tập train.
+    - val_loader: DataLoader tập validation.
+    - n_epochs: Số epoch huấn luyện.
+    - learning_rate: Tốc độ học (1e-3 cho Phase 1, 1e-4 cho Phase 2).
+    - class_weights: Trọng số phân lớp (Tensor) nhằm giảm ảnh hưởng mất cân bằng dữ liệu.
+    - device: Thiết bị tính toán (torch.device('cuda') hoặc torch.device('cpu')).
+    - checkpoint_path: Đường dẫn lưu checkpoint xuất sắc nhất (best validation accuracy).
+    - history_path: Đường dẫn file JSON lưu lịch sử Loss và Accuracy qua từng epoch.
+    - phase_name: Tên giai đoạn ('phase1_frozen_backbone' hoặc 'phase2_full_finetuning').
+    - class_names: Danh sách tên các lớp bệnh để lưu kèm vào metadata của checkpoint.
+    """
     if n_epochs < 1:
         raise ValueError(f"n_epochs must be at least 1, got {n_epochs}.")
 
@@ -177,7 +194,7 @@ def train_model(
             f"Time: {elapsed:.0f}s"
         )
 
-        # Lưu Checkpoint xuất sắc nhất
+        # Lưu Checkpoint xuất sắc nhất theo validation accuracy
         if val_metrics["accuracy"] > best_val_accuracy:
             best_val_accuracy = val_metrics["accuracy"]
             history["best_val_accuracy"] = round(best_val_accuracy, 6)
@@ -190,11 +207,28 @@ def train_model(
                     "phase": phase_name,
                     "epoch": epoch,
                     "val_accuracy": best_val_accuracy,
+                    "class_names": class_names or [],
                 },
             )
 
             print(f"  --> Best checkpoint saved! (Val Acc: {best_val_accuracy:.4f})")
 
+    # Lưu file lịch sử học tập
     save_json(history, history_path)
+
+    # Đồng bộ cả 2 định dạng tên file history (<animal>_history_<phase>.json và history_<animal>_<phase>.json)
+    history_p = Path(history_path)
+    name = history_p.name
+    if name.startswith("history_"):
+        alt_name = name.replace("history_", "", 1)
+        # chèn _history_ vào giữa animal và phase: e.g. cow_phase1.json -> cow_history_phase1.json
+        parts = alt_name.split("_")
+        if len(parts) >= 2:
+            alt_name = f"{parts[0]}_history_{'_'.join(parts[1:])}"
+            save_json(history, history_p.parent / alt_name)
+    elif "_history_" in name:
+        parts = name.split("_history_")
+        alt_name = f"history_{parts[0]}_{parts[1]}"
+        save_json(history, history_p.parent / alt_name)
 
     return history

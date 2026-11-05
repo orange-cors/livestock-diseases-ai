@@ -63,6 +63,12 @@ def save_checkpoint(model: nn.Module, path: str | Path, meta: dict | None = None
 
 def load_checkpoint(model: nn.Module, path: str | Path, device: torch.device | str = "cpu") -> dict:
     """Nạp trọng số checkpoint đã lưu vào mô hình và trả về thông tin metadata."""
-    checkpoint = torch.load(path, map_location=device)
+    try:
+        # PyTorch 2.4+ khuyến nghị kiểm soát weights_only
+        checkpoint = torch.load(path, map_location=device, weights_only=False)
+    except TypeError:
+        # Tương thích với các phiên bản PyTorch cũ hơn
+        checkpoint = torch.load(path, map_location=device)
+
     model.load_state_dict(checkpoint["state_dict"])
     return checkpoint.get("meta", {})

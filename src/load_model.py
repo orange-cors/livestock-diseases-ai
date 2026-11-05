@@ -28,7 +28,11 @@ def load_best_model(
             f"Không tìm thấy file trọng số mô hình tại:\n{checkpoint_path}"
         )
 
-    checkpoint = torch.load(checkpoint_path, map_location="cpu")
+    try:
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    except TypeError:
+        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+
     checkpoint_n_classes = checkpoint["state_dict"]["fc.1.weight"].shape[0]
 
     if n_classes is None:

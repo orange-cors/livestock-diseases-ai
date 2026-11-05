@@ -171,36 +171,48 @@ def plot_training_curves(
     save_path: str | Path,
     prefix: str = "",
 ):
-    """Vẽ đường cong Loss và Accuracy qua các Epoch."""
+    """
+    Vẽ và lưu biểu đồ trực quan hóa hàm mất mát (Loss) và độ chính xác (Accuracy) qua từng Epoch.
+    
+    Tự động chuẩn hóa đường dẫn lưu trữ, tránh hiện tượng nhân đôi tiền tố (prefix).
+    """
     epochs = range(1, len(history["train_loss"]) + 1)
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-    axes[0].plot(epochs, history["train_loss"], marker="o", label="Train")
-    axes[0].plot(epochs, history["val_loss"], marker="o", label="Validation")
-    axes[0].set_title("Training and Validation Loss")
+    # Đồ thị Training vs Validation Loss
+    axes[0].plot(epochs, history["train_loss"], marker="o", label="Train Loss", color="#1f77b4")
+    axes[0].plot(epochs, history["val_loss"], marker="o", label="Validation Loss", color="#ff7f0e")
+    axes[0].set_title("Training & Validation Loss")
     axes[0].set_xlabel("Epoch")
     axes[0].set_ylabel("Loss")
     axes[0].legend()
-    axes[0].grid(True)
+    axes[0].grid(True, linestyle="--", alpha=0.6)
 
-    axes[1].plot(epochs, history["train_accuracy"], marker="o", label="Train")
-    axes[1].plot(epochs, history["val_accuracy"], marker="o", label="Validation")
-    axes[1].set_title("Training and Validation Accuracy")
+    # Đồ thị Training vs Validation Accuracy
+    axes[1].plot(epochs, history["train_accuracy"], marker="o", label="Train Accuracy", color="#2ca02c")
+    axes[1].plot(epochs, history["val_accuracy"], marker="o", label="Validation Accuracy", color="#d62728")
+    axes[1].set_title("Training & Validation Accuracy")
     axes[1].set_xlabel("Epoch")
     axes[1].set_ylabel("Accuracy")
     axes[1].set_ylim(0, 1.05)
     axes[1].legend()
-    axes[1].grid(True)
+    axes[1].grid(True, linestyle="--", alpha=0.6)
 
     plt.tight_layout()
     save_path = Path(save_path)
     save_path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(
-        save_path.parent / f"{prefix}{save_path.name}",
-        dpi=300,
-        bbox_inches="tight",
-    )
+
+    # Đảm bảo tiền tố nhất quán và không bị trùng lặp
+    filename = save_path.name
+    if prefix:
+        if not prefix.endswith("_"):
+            prefix = f"{prefix}_"
+        if not filename.startswith(prefix):
+            filename = f"{prefix}{filename}"
+
+    final_path = save_path.parent / filename
+    plt.savefig(final_path, dpi=300, bbox_inches="tight")
     plt.close()
 
 
@@ -215,7 +227,14 @@ def run_full_evaluation(
     display_names: list | None = None,
     prefix: str = "",
 ) -> dict:
-    """Chạy đánh giá toàn diện mô hình trên tập Test set."""
+    """
+    Chạy đánh giá toàn diện mô hình trên tập Test set:
+    - Thu thập toàn bộ dự đoán thực tế vs mô hình.
+    - Tính toán metrics: Accuracy, Macro F1, Weighted F1, Per-class Precision/Recall.
+    - Lưu báo cáo phân loại dưới 2 định dạng: JSON và CSV.
+    - Vẽ và lưu Ma trận nhầm lẫn (Confusion Matrix).
+    - Vẽ và lưu Biểu đồ Per-Class F1-score.
+    """
     y_true, y_pred = collect_predictions(model, test_loader, device)
 
     report = compute_classification_metrics(
@@ -226,13 +245,21 @@ def run_full_evaluation(
 
     results_dir = Path(results_dir)
     figures_dir = Path(figures_dir)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
 
+    # Chuẩn hóa tiền tố file
+    if prefix and not prefix.endswith("_"):
+        prefix = f"{prefix}_"
+
+    # Lưu Classification Report (JSON + CSV)
     save_classification_report(
         report,
         json_path=results_dir / f"{prefix}classification_report_{label}.json",
         csv_path=results_dir / f"{prefix}classification_report_{label}.csv",
     )
 
+    # Vẽ và lưu Normalized Confusion Matrix
     plot_confusion_matrix(
         y_true,
         y_pred,
@@ -242,6 +269,7 @@ def run_full_evaluation(
         display_names=display_names,
     )
 
+    # Vẽ và lưu Per-Class F1-Score
     plot_per_class_f1(
         report,
         class_names,
@@ -249,7 +277,7 @@ def run_full_evaluation(
         display_names=display_names,
     )
 
-    print(f"\n--- Evaluation Results ({label}) ---")
+    print(f"\n--- Kết quả đánh giá ({prefix}{label}) ---")
     print(f"Accuracy   : {report['overall_accuracy']:.4f}")
     print(f"Macro F1   : {report['macro avg']['f1-score']:.4f}")
     print(f"Weighted F1: {report['weighted avg']['f1-score']:.4f}")
